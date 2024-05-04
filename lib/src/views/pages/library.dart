@@ -1,3 +1,4 @@
+import 'package:esiea_book_app/src/models/book.dart';
 import 'package:flutter/material.dart';
 import 'book_search.dart';
 import 'book_details.dart';
@@ -19,7 +20,8 @@ class _LibraryState extends State<Library> {
 
   void _loadBooks() async {
     final dbHelper = DatabaseHelper();
-    List<Map<String, dynamic>> loadedBooks = await dbHelper.getBooks();
+    BookHelper bookHelper = await dbHelper.bookHelper;
+    List<Map<String, dynamic>> loadedBooks = await bookHelper.getBooks();
     setState(() {
       books = loadedBooks;
     });

@@ -1,3 +1,5 @@
+import 'package:esiea_book_app/src/models/book.dart';
+import 'package:esiea_book_app/src/models/note.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,31 +16,33 @@ class DatabaseHelper {
   _initDB(String filePath) async {
     final dbPath = await getApplicationDocumentsDirectory();
     final path = join(dbPath.path, filePath);
-    return await openDatabase(path, version: 1, onCreate: (db, version) {
-      return db.execute('''
-        CREATE TABLE books(id TEXT PRIMARY KEY, title TEXT, authors TEXT);
-      ''');
+    return await openDatabase(path, version: 1, onCreate: (db, version) async {
+      await db.execute('''
+      CREATE TABLE books(
+        id TEXT PRIMARY KEY,
+        title TEXT,
+        authors TEXT,
+        rating REAL
+      );
+    ''');
+      await db.execute('''
+      CREATE TABLE notes(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        bookId TEXT,
+        content TEXT,
+        FOREIGN KEY(bookId) REFERENCES books(id) ON DELETE CASCADE
+      );
+    ''');
     });
   }
 
-  Future<List<Map<String, dynamic>>> getBooks() async {
+  Future<BookHelper> get bookHelper async {
     final db = await database;
-    final List<Map<String, dynamic>> books = await db.query('books');
-    return books;
+    return BookHelper(db);
   }
 
-  Future<void> insertBook(Map<String, dynamic> book) async {
+  Future<NoteHelper> get noteHelper async {
     final db = await database;
-    await db.insert('books', book,
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
-
-  Future<void> deleteBook(String id) async {
-    final db = await database;
-    await db.delete(
-      'books',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return NoteHelper(db);
   }
 }

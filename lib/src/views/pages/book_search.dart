@@ -1,3 +1,4 @@
+import 'package:esiea_book_app/src/models/book.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -86,9 +87,10 @@ class _BookSearchState extends State<BookSearch> {
               Map<String, dynamic> bookData = {
                 'id': book['key'],
                 'title': book['title'],
-                'authors': book['author_name']?.join(', ') ?? 'Unknown Author'
+                'authors': book['author_name']?.join(', ') ?? 'Unknown Author',
               };
-              await _dbHelper.insertBook(bookData);
+              BookHelper bookHelper = await _dbHelper.bookHelper;
+              await bookHelper.insertBook(bookData);
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Livre ajouté à la bibliothèque!')));
               widget.onUpdate();

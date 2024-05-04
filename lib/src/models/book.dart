@@ -1,19 +1,34 @@
-class Book {
-  final String id;
-  final String title;
-  final String author;
-  final double? rating;
-  final String? notes;
+import 'package:sqflite/sqflite.dart';
 
-  Book({required this.id, required this.title, required this.author, this.rating, this.notes});
+class BookHelper {
+  final Database _database;
 
-  factory Book.fromJson(Map<String, dynamic> json) {
-    return Book(
-      id: json['key'],
-      title: json['title'],
-      author: json['author_name']?.join(", ") ?? "Unknown",
-      rating: json['rating']?.toDouble(),
-      notes: json['notes'] ?? '',
+  BookHelper(this._database);
+
+  Future<List<Map<String, dynamic>>> getBooks() async {
+    final List<Map<String, dynamic>> books = await _database.query('books');
+    return books;
+  }
+
+  Future<void> insertBook(Map<String, dynamic> book) async {
+    await _database.insert('books', book,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> updateBookRating(String id, double rating) async {
+    await _database.update(
+      'books',
+      {'rating': rating},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> deleteBook(String id) async {
+    await _database.delete(
+      'books',
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 }
