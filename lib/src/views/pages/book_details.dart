@@ -40,8 +40,7 @@ class _BookDetailsState extends State<BookDetails> {
         onNoteSaved: (note) async {
           NoteHelper noteHelper = await dbHelper.noteHelper;
           noteHelper.addNote(widget.book['id'], note);
-          _noteController
-              .clear();
+          _noteController.clear();
           _loadNotes();
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Note ajoutée avec succès!')));
@@ -67,6 +66,14 @@ class _BookDetailsState extends State<BookDetails> {
     );
   }
 
+  void _deleteNote(int noteId) async {
+    NoteHelper noteHelper = await dbHelper.noteHelper;
+    await noteHelper.deleteNote(noteId);
+    _loadNotes();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Note supprimée avec succès!')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,10 +95,23 @@ class _BookDetailsState extends State<BookDetails> {
               child: ListView.builder(
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(notes[index]['content']),
-                    onTap: () =>
-                        _editNote(notes[index]['id'], notes[index]['content']),
+                  return Dismissible(
+                    key: Key(notes[index]['id'].toString()),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      _deleteNote(notes[index]['id']);
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Icon(Icons.delete, color: Colors.white),
+                    ),
+                    child: ListTile(
+                      title: Text(notes[index]['content']),
+                      onTap: () => _editNote(
+                          notes[index]['id'], notes[index]['content']),
+                    ),
                   );
                 },
               ),
