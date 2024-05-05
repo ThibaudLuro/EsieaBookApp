@@ -19,6 +19,14 @@ class NoteHelper {
     return notes;
   }
 
+  Future<List<Map<String, dynamic>>> getLatestNotes() async {
+    final List<Map<String, dynamic>> notes = await _database.query(
+      'notes',
+      limit: 5,
+    );
+    return notes;
+  }
+
   Future<void> addNote(String bookId, String content) async {
     await _database.insert(
       'notes',

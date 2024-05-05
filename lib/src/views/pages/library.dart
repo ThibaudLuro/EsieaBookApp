@@ -2,7 +2,7 @@ import 'package:esiea_book_app/src/models/book.dart';
 import 'package:flutter/material.dart';
 import 'book_search.dart';
 import 'book_details.dart';
-import '../../models/database_helper.dart'; // Assurez-vous d'importer votre classe helper
+import '../../models/database_helper.dart';
 
 class Library extends StatefulWidget {
   @override

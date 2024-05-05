@@ -1,3 +1,4 @@
+import 'package:esiea_book_app/src/views/pages/home.dart';
 import 'package:esiea_book_app/src/views/pages/notes.dart';
 import 'package:flutter/material.dart';
 import '../pages/library.dart';
@@ -10,7 +11,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
-    Library(),
+    HomePage(),
     Library(),
     NotesScreen(),
   ];

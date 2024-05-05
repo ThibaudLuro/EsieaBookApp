@@ -10,6 +10,14 @@ class BookHelper {
     return books;
   }
 
+  Future<List<Map<String, dynamic>>> getLatestBooks() async {
+    final List<Map<String, dynamic>> books = await _database.query(
+      'books',
+      limit: 5,
+    );
+    return books;
+  }
+
   Future<void> insertBook(Map<String, dynamic> book) async {
     await _database.insert('books', book,
         conflictAlgorithm: ConflictAlgorithm.replace);
