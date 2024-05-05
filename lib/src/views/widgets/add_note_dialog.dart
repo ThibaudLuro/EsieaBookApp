@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AddNoteDialog extends StatelessWidget {
-  final String bookId;
+  final String? bookId;
   final Function(String) onNoteSaved;
   final String? initialNote;
   final TextEditingController _noteController;
 
   AddNoteDialog({
-    required this.bookId,
+    this.bookId,
     required this.onNoteSaved,
     this.initialNote,
   }) : _noteController = TextEditingController(text: initialNote);

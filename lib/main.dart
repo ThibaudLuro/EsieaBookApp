@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './src/views/pages/library.dart';
+import 'src/views/widgets/navigation.dart';
 
 void main() {
   runApp(MaterialApp(
-    title: 'Navigation Example',
-    home: Library(),
+    title: 'ESIEA Book App',
+    home: Navigation(),
   ));
 }

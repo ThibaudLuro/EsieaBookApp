@@ -5,6 +5,11 @@ class NoteHelper {
 
   NoteHelper(this._database);
 
+  Future<List<Map<String, dynamic>>> getNotes() async {
+    final List<Map<String, dynamic>> notes = await _database.query('notes');
+    return notes;
+  }
+
   Future<List<Map<String, dynamic>>> getNotesForBook(String bookId) async {
     final List<Map<String, dynamic>> notes = await _database.query(
       'notes',
