@@ -83,124 +83,135 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.bold,
                       color: Colors.brown)),
               const SizedBox(height: 10),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: latestBooks.length,
-                  itemBuilder: (context, index) {
-                    String imageUrl =
-                        'https://covers.openlibrary.org/b/id/${latestBooks[index]['coverId']}-L.jpg';
-
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BookDetails(
-                              book: latestBooks[index],
-                              onUpdate: _loadLatestBooks,
-                            ),
-                          ),
-                        );
-                      },
-                      child: SizedBox(
-                        width: 160,
-                        child: Card(
-                          clipBehavior: Clip.antiAlias,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(imageUrl),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Spacer(),
-                                  Text(
-                                    latestBooks[index]['title'],
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      shadows: <Shadow>[
-                                        Shadow(
-                                          offset: Offset(1.0, 1.0),
-                                          blurRadius: 3.0,
-                                          color: Color.fromARGB(150, 0, 0, 0),
-                                        ),
-                                        Shadow(
-                                          offset: Offset(1.0, 1.0),
-                                          blurRadius: 8.0,
-                                          color: Color.fromARGB(150, 0, 0, 0),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Text(
-                                    latestBooks[index]['authors'],
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      shadows: <Shadow>[
-                                        Shadow(
-                                          offset: Offset(1.0, 1.0),
-                                          blurRadius: 3.0,
-                                          color: Color.fromARGB(150, 0, 0, 0),
-                                        ),
-                                        Shadow(
-                                          offset: Offset(1.0, 1.0),
-                                          blurRadius: 8.0,
-                                          color: Color.fromARGB(150, 0, 0, 0),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+              latestBooks.isEmpty
+                  ? const Center(
+                      child: Text('Aucun livre pour le moment',
+                          style: TextStyle(fontSize: 16)))
+                  : SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: latestBooks.length,
+                        itemBuilder: (context, index) {
+                          String imageUrl =
+                              'https://covers.openlibrary.org/b/id/${latestBooks[index]['coverId']}-L.jpg';
+                          return buildBookItem(context, index, imageUrl);
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
               const SizedBox(height: 20),
               const Text('Dernières notes',
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.brown)),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: latestNotes.length,
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    key: Key(latestNotes[index]['id'].toString()),
-                    background: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
-                        child: const Icon(Icons.delete, color: Colors.white)),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      _deleteNote(latestNotes[index]['id']);
-                    },
-                    child: ListTile(
-                      title: Text(latestNotes[index]['content']),
-                      onTap: () => _editNote(latestNotes[index]['id'],
-                          latestNotes[index]['content']),
+              latestNotes.isEmpty
+                  ? const Center(
+                      child: Text('Aucune note pour le moment',
+                          style: TextStyle(fontSize: 16)))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: latestNotes.length,
+                      itemBuilder: (context, index) {
+                        return buildNoteItem(context, index);
+                      },
                     ),
-                  );
-                },
-              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildBookItem(BuildContext context, int index, String imageUrl) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BookDetails(
+              book: latestBooks[index],
+              onUpdate: _loadLatestBooks,
+            ),
+          ),
+        );
+      },
+      child: SizedBox(
+        width: 160,
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Spacer(),
+                  Text(
+                    latestBooks[index]['title'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                            offset: Offset(1.0, 1.0),
+                            blurRadius: 3.0,
+                            color: Color.fromARGB(150, 0, 0, 0)),
+                        Shadow(
+                            offset: Offset(1.0, 1.0),
+                            blurRadius: 8.0,
+                            color: Color.fromARGB(150, 0, 0, 0)),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    latestBooks[index]['authors'],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                            offset: Offset(1.0, 1.0),
+                            blurRadius: 3.0,
+                            color: Color.fromARGB(150, 0, 0, 0)),
+                        Shadow(
+                            offset: Offset(1.0, 1.0),
+                            blurRadius: 8.0,
+                            color: Color.fromARGB(150, 0, 0, 0)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildNoteItem(BuildContext context, int index) {
+    return Dismissible(
+      key: Key(latestNotes[index]['id'].toString()),
+      background: Container(
+          color: Colors.red,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20),
+          child: const Icon(Icons.delete, color: Colors.white)),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        _deleteNote(latestNotes[index]['id']);
+      },
+      child: ListTile(
+        title: Text(latestNotes[index]['content']),
+        onTap: () =>
+            _editNote(latestNotes[index]['id'], latestNotes[index]['content']),
       ),
     );
   }

@@ -94,29 +94,35 @@ class _BookDetailsState extends State<BookDetails> {
             const SizedBox(height: 20),
             const Text("Mes notes:", style: TextStyle(fontSize: 14)),
             Expanded(
-              child: ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    key: Key(notes[index]['id'].toString()),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      _deleteNote(notes[index]['id']);
-                    },
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: const Icon(Icons.delete, color: Colors.white),
+              child: notes.isEmpty
+                  ? Center(
+                      child: Text("Aucune note pour le moment",
+                          style: TextStyle(fontSize: 16)))
+                  : ListView.builder(
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        return Dismissible(
+                          key: Key(notes[index]['id'].toString()),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (direction) {
+                            _deleteNote(notes[index]['id']);
+                          },
+                          background: Container(
+                            color: Colors.red,
+                            alignment: Alignment.centerRight,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child:
+                                const Icon(Icons.delete, color: Colors.white),
+                          ),
+                          child: ListTile(
+                            title: Text(notes[index]['content']),
+                            onTap: () => _editNote(
+                                notes[index]['id'], notes[index]['content']),
+                          ),
+                        );
+                      },
                     ),
-                    child: ListTile(
-                      title: Text(notes[index]['content']),
-                      onTap: () => _editNote(
-                          notes[index]['id'], notes[index]['content']),
-                    ),
-                  );
-                },
-              ),
             ),
             const Text("Noter le livre:", style: TextStyle(fontSize: 18)),
             BookRating(
@@ -131,22 +137,19 @@ class _BookDetailsState extends State<BookDetails> {
             ),
             const SizedBox(height: 20),
             Container(
-              width: double
-                  .infinity,
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: _addNote,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        5),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
                 child: const Text('Ajouter une note'),
               ),
             ),
             SizedBox(
-              width: double
-                  .infinity,
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
                   BookHelper bookHelper = await dbHelper.bookHelper;
@@ -159,8 +162,7 @@ class _BookDetailsState extends State<BookDetails> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        5),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
                 child: const Text('Supprimer le livre'),
