@@ -69,78 +69,135 @@ class _HomePageState extends State<HomePage> {
         title: Text('Accueil'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Text('Dernières lectures',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Container(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: latestBooks.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookDetails(
-                            book: latestBooks[index],
-                            onUpdate: _loadLatestBooks,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              Text('Dernières lectures',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown)),
+              SizedBox(height: 10),
+              Container(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: latestBooks.length,
+                  itemBuilder: (context, index) {
+                    String imageUrl =
+                        'https://covers.openlibrary.org/b/id/${latestBooks[index]['coverId']}-L.jpg';
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookDetails(
+                              book: latestBooks[index],
+                              onUpdate: _loadLatestBooks,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 160,
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Text(
+                                    latestBooks[index]['title'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      shadows: <Shadow>[
+                                        Shadow(
+                                          offset: Offset(1.0, 1.0),
+                                          blurRadius: 3.0,
+                                          color: Color.fromARGB(150, 0, 0, 0),
+                                        ),
+                                        Shadow(
+                                          offset: Offset(1.0, 1.0),
+                                          blurRadius: 8.0,
+                                          color: Color.fromARGB(150, 0, 0, 0),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    latestBooks[index]['authors'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      shadows: <Shadow>[
+                                        Shadow(
+                                          offset: Offset(1.0, 1.0),
+                                          blurRadius: 3.0,
+                                          color: Color.fromARGB(150, 0, 0, 0),
+                                        ),
+                                        Shadow(
+                                          offset: Offset(1.0, 1.0),
+                                          blurRadius: 8.0,
+                                          color: Color.fromARGB(150, 0, 0, 0),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      );
-                    },
-                    child: Container(
-                      width: 160,
-                      child: Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(latestBooks[index]['title'],
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            Text(latestBooks[index]['authors']),
-                          ],
-                        ),
                       ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              Text('Dernières notes',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown)),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: latestNotes.length,
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                    key: Key(latestNotes[index]['id'].toString()),
+                    background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 20),
+                        child: Icon(Icons.delete, color: Colors.white)),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      _deleteNote(latestNotes[index]['id']);
+                    },
+                    child: ListTile(
+                      title: Text(latestNotes[index]['content']),
+                      onTap: () => _editNote(latestNotes[index]['id'],
+                          latestNotes[index]['content']),
                     ),
                   );
                 },
               ),
-            ),
-            SizedBox(height: 20),
-            Text('Dernières notes',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ListView.builder(
-              shrinkWrap: true,
-              physics:
-                  NeverScrollableScrollPhysics(),
-              itemCount: latestNotes.length,
-              itemBuilder: (context, index) {
-                return Dismissible(
-                  key: Key(latestNotes[index]['id']
-                      .toString()),
-                  background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 20),
-                      child: Icon(Icons.delete, color: Colors.white)),
-                  direction:
-                      DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    _deleteNote(latestNotes[index]['id']);
-                  },
-                  child: ListTile(
-                    title: Text(latestNotes[index]['content']),
-                    onTap: () => _editNote(latestNotes[index]['id'],
-                        latestNotes[index]['content']),
-                  ),
-                );
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

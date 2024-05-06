@@ -87,6 +87,7 @@ class _BookSearchState extends State<BookSearch> {
               Map<String, dynamic> bookData = {
                 'id': book['key'],
                 'title': book['title'],
+                'coverId': book['cover_i'],
                 'authors': book['author_name']?.join(', ') ?? 'Unknown Author',
               };
               BookHelper bookHelper = await _dbHelper.bookHelper;

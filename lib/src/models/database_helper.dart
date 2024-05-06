@@ -22,6 +22,7 @@ class DatabaseHelper {
         id TEXT PRIMARY KEY,
         title TEXT,
         authors TEXT,
+        coverId TEXT,
         rating REAL
       );
     ''');
