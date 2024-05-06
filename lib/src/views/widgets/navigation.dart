@@ -27,7 +27,9 @@ class _NavigationState extends State<Navigation> {
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.brown[50],
         currentIndex: _currentIndex,
+        selectedItemColor: Colors.brown,
         onTap: _onTap,
         items: [
           BottomNavigationBarItem(
