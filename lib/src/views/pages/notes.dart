@@ -1,5 +1,6 @@
 import 'package:esiea_book_app/src/models/note.dart';
 import 'package:esiea_book_app/src/views/widgets/add_note_dialog.dart';
+import 'package:esiea_book_app/src/views/widgets/note_list.dart';
 import 'package:flutter/material.dart';
 import 'package:esiea_book_app/src/models/database_helper.dart';
 
@@ -37,7 +38,7 @@ class _NotesScreenState extends State<NotesScreen> {
           noteHelper.updateNote(noteId, updatedNote);
           _loadNotes();
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Note mise à jour avec succès!')));
+              const SnackBar(content: Text('Note mise à jour avec succès!')));
         },
       ),
     );
@@ -48,39 +49,19 @@ class _NotesScreenState extends State<NotesScreen> {
     await noteHelper.deleteNote(noteId);
     _loadNotes();
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Note supprimée avec succès!')));
+        .showSnackBar(const SnackBar(content: Text('Note supprimée avec succès!')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mes notes'),
+        title: const Text('Mes notes'),
       ),
-      body: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          return Dismissible(
-            key: Key(notes[index]['id'].toString()),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              _deleteNote(notes[index]['id']);
-            },
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            child: ListTile(
-              title: Text(notes[index]['content']),
-              subtitle: Text(notes[index]['bookName'] ??
-                  'No book associated'), // Affiche le nom du livre si disponible
-              onTap: () =>
-                  _editNote(notes[index]['id'], notes[index]['content']),
-            ),
-          );
-        },
+      body: NoteList(
+        notes: notes,
+        onDelete: _deleteNote,
+        onNoteTap: _editNote,
       ),
     );
   }

@@ -60,8 +60,8 @@ class _HomePageState extends State<HomePage> {
     NoteHelper noteHelper = await dbHelper.noteHelper;
     await noteHelper.deleteNote(noteId);
     _loadLatestNotes();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Note supprimée avec succès!')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Note supprimée avec succès!')));
   }
 
   @override
