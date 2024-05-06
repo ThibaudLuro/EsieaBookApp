@@ -36,9 +36,10 @@ class _LibraryState extends State<Library> {
       body: ListView.builder(
         itemCount: books.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(books[index]['title']),
-            subtitle: Text(books[index]['authors']),
+          String coverUrl =
+              'https://covers.openlibrary.org/b/id/${books[index]['coverId']}-M.jpg';
+
+          return InkWell(
             onTap: () {
               Navigator.push(
                 context,
@@ -50,6 +51,32 @@ class _LibraryState extends State<Library> {
                 ),
               );
             },
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Image.network(
+                    coverUrl,
+                    width: 70,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(books[index]['title'],
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        Text(books[index]['authors'],
+                            style: TextStyle(fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../../models/database_helper.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -48,7 +50,7 @@ class _HomePageState extends State<HomePage> {
           noteHelper.updateNote(noteId, updatedNote);
           _loadLatestNotes();
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Note mise à jour avec succès!')));
+              const SnackBar(content: Text('Note mise à jour avec succès!')));
         },
       ),
     );
@@ -59,15 +61,14 @@ class _HomePageState extends State<HomePage> {
     await noteHelper.deleteNote(noteId);
     _loadLatestNotes();
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Note supprimée avec succès!')));
+        .showSnackBar(const SnackBar(content: Text('Note supprimée avec succès!')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.brown[50],
-        title: Text('Accueil'),
+        title: const Text('Accueil'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -75,14 +76,14 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
-              Text('Dernières lectures',
+              const SizedBox(height: 20),
+              const Text('Dernières lectures',
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.brown)),
-              SizedBox(height: 10),
-              Container(
+              const SizedBox(height: 10),
+              SizedBox(
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: Container(
+                      child: SizedBox(
                         width: 160,
                         child: Card(
                           clipBehavior: Clip.antiAlias,
@@ -119,10 +120,10 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Spacer(),
+                                  const Spacer(),
                                   Text(
                                     latestBooks[index]['title'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                       shadows: <Shadow>[
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Text(
                                     latestBooks[index]['authors'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       shadows: <Shadow>[
                                         Shadow(
@@ -167,15 +168,15 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
-              Text('Dernières notes',
+              const SizedBox(height: 20),
+              const Text('Dernières notes',
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.brown)),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: latestNotes.length,
                 itemBuilder: (context, index) {
                   return Dismissible(
@@ -183,8 +184,8 @@ class _HomePageState extends State<HomePage> {
                     background: Container(
                         color: Colors.red,
                         alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.delete, color: Colors.white)),
+                        padding: const EdgeInsets.only(right: 20),
+                        child: const Icon(Icons.delete, color: Colors.white)),
                     direction: DismissDirection.endToStart,
                     onDismissed: (direction) {
                       _deleteNote(latestNotes[index]['id']);

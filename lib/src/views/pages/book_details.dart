@@ -43,7 +43,7 @@ class _BookDetailsState extends State<BookDetails> {
           _noteController.clear();
           _loadNotes();
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Note ajoutée avec succès!')));
+              const SnackBar(content: Text('Note ajoutée avec succès!')));
         },
       ),
     );
@@ -60,7 +60,7 @@ class _BookDetailsState extends State<BookDetails> {
           noteHelper.updateNote(noteId, updatedNote);
           _loadNotes();
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Note mise à jour avec succès!')));
+              const SnackBar(content: Text('Note mise à jour avec succès!')));
         },
       ),
     );
@@ -70,8 +70,8 @@ class _BookDetailsState extends State<BookDetails> {
     NoteHelper noteHelper = await dbHelper.noteHelper;
     await noteHelper.deleteNote(noteId);
     _loadNotes();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Note supprimée avec succès!')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Note supprimée avec succès!')));
   }
 
   @override
@@ -85,12 +85,14 @@ class _BookDetailsState extends State<BookDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Title: ${widget.book['title']}",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text("Authors: ${widget.book['authors']}",
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
+            Text("Titre: ${widget.book['title']}",
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text("Auteur: ${widget.book['authors']}",
+                style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
+            const Text("Mes notes:", style: TextStyle(fontSize: 14)),
             Expanded(
               child: ListView.builder(
                 itemCount: notes.length,
@@ -104,8 +106,8 @@ class _BookDetailsState extends State<BookDetails> {
                     background: Container(
                       color: Colors.red,
                       alignment: Alignment.centerRight,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Icon(Icons.delete, color: Colors.white),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     child: ListTile(
                       title: Text(notes[index]['content']),
@@ -116,7 +118,7 @@ class _BookDetailsState extends State<BookDetails> {
                 },
               ),
             ),
-            Text("Noter le livre:", style: TextStyle(fontSize: 18)),
+            const Text("Noter le livre:", style: TextStyle(fontSize: 18)),
             BookRating(
               bookId: widget.book['id'],
               initialRating: widget.book['rating']?.toDouble() ?? 0,
@@ -127,24 +129,42 @@ class _BookDetailsState extends State<BookDetails> {
                         'Note mise à jour à ${widget.book['rating']} étoiles!')));
               },
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _addNote,
-              child: Text('Ajouter une note'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+            const SizedBox(height: 20),
+            Container(
+              width: double
+                  .infinity,
+              child: ElevatedButton(
+                onPressed: _addNote,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        5),
+                  ),
+                ),
+                child: const Text('Ajouter une note'),
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                BookHelper bookHelper = await dbHelper.bookHelper;
-                await bookHelper.deleteBook(widget.book['id']);
-                widget.onUpdate();
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Livre supprimé de la bibliothèque!')));
-              },
-              child: Text('Supprimer le livre'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            SizedBox(
+              width: double
+                  .infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  BookHelper bookHelper = await dbHelper.bookHelper;
+                  await bookHelper.deleteBook(widget.book['id']);
+                  widget.onUpdate();
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Livre supprimé de la bibliothèque!')));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        5),
+                  ),
+                ),
+                child: const Text('Supprimer le livre'),
+              ),
             ),
           ],
         ),

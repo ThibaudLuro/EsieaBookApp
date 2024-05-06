@@ -20,7 +20,8 @@ class _NotesScreenState extends State<NotesScreen> {
 
   void _loadNotes() async {
     NoteHelper noteHelper = await dbHelper.noteHelper;
-    List<Map<String, dynamic>> loadedNotes = await noteHelper.getNotes();
+    List<Map<String, dynamic>> loadedNotes = await noteHelper
+        .getNotesWithBookNames(); // Supposons que cette méthode existe
     setState(() {
       notes = loadedNotes;
     });
@@ -68,11 +69,13 @@ class _NotesScreenState extends State<NotesScreen> {
             background: Container(
               color: Colors.red,
               alignment: Alignment.centerRight,
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Icon(Icons.delete, color: Colors.white),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: const Icon(Icons.delete, color: Colors.white),
             ),
             child: ListTile(
               title: Text(notes[index]['content']),
+              subtitle: Text(notes[index]['bookName'] ??
+                  'No book associated'), // Affiche le nom du livre si disponible
               onTap: () =>
                   _editNote(notes[index]['id'], notes[index]['content']),
             ),
