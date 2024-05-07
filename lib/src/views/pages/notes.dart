@@ -22,7 +22,7 @@ class _NotesScreenState extends State<NotesScreen> {
   void _loadNotes() async {
     NoteHelper noteHelper = await dbHelper.noteHelper;
     List<Map<String, dynamic>> loadedNotes = await noteHelper
-        .getNotesWithBookNames(); // Supposons que cette méthode existe
+        .getNotesWithBookNames();
     setState(() {
       notes = loadedNotes;
     });

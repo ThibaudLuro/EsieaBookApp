@@ -2,6 +2,7 @@ import 'package:esiea_book_app/src/models/book.dart';
 import 'package:esiea_book_app/src/models/note.dart';
 import 'package:esiea_book_app/src/views/pages/book_details.dart';
 import 'package:esiea_book_app/src/views/widgets/add_note_dialog.dart';
+import 'package:esiea_book_app/src/views/widgets/book_card.dart';
 import 'package:esiea_book_app/src/views/widgets/note.dart';
 import 'package:flutter/material.dart';
 import '../../models/database_helper.dart';
@@ -23,6 +24,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadLatestBooks();
     _loadLatestNotes();
+  }
+
+  void _navigateToBookDetails(BuildContext context, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookDetails(
+          book: latestBooks[index],
+          onUpdate: _loadLatestBooks,
+          onNoteUpdate: _loadLatestNotes,
+        ),
+      ),
+    );
   }
 
   void _loadLatestBooks() async {
@@ -94,9 +108,13 @@ class _HomePageState extends State<HomePage> {
                         scrollDirection: Axis.horizontal,
                         itemCount: latestBooks.length,
                         itemBuilder: (context, index) {
-                          String imageUrl =
-                              'https://covers.openlibrary.org/b/id/${latestBooks[index]['coverId']}-L.jpg';
-                          return buildBookItem(context, index, imageUrl);
+                          return BookCard(
+                            title: latestBooks[index]['title'],
+                            authors: latestBooks[index]['authors'],
+                            imageUrl:
+                                'https://covers.openlibrary.org/b/id/${latestBooks[index]['coverId']}-L.jpg',
+                            onTap: () => _navigateToBookDetails(context, index),
+                          );
                         },
                       ),
                     ),
@@ -127,79 +145,6 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildBookItem(BuildContext context, int index, String imageUrl) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BookDetails(
-              book: latestBooks[index],
-              onUpdate: _loadLatestBooks,
-              onNoteUpdate: _loadLatestNotes,
-            ),
-          ),
-        );
-      },
-      child: SizedBox(
-        width: 160,
-        child: Card(
-          clipBehavior: Clip.antiAlias,
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  Text(
-                    latestBooks[index]['title'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Color.fromARGB(150, 0, 0, 0)),
-                        Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 8.0,
-                            color: Color.fromARGB(150, 0, 0, 0)),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    latestBooks[index]['authors'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Color.fromARGB(150, 0, 0, 0)),
-                        Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 8.0,
-                            color: Color.fromARGB(150, 0, 0, 0)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       ),
