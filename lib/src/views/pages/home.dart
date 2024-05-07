@@ -133,6 +133,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context) => BookDetails(
               book: latestBooks[index],
               onUpdate: _loadLatestBooks,
+              onNoteUpdate: _loadLatestNotes,
             ),
           ),
         );

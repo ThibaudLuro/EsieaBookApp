@@ -8,8 +8,9 @@ import '../../models/database_helper.dart';
 class BookDetails extends StatefulWidget {
   final Map<String, dynamic> book;
   final VoidCallback onUpdate;
+  final VoidCallback? onNoteUpdate;
 
-  BookDetails({required this.book, required this.onUpdate});
+  BookDetails({required this.book, required this.onUpdate, this.onNoteUpdate});
 
   @override
   _BookDetailsState createState() => _BookDetailsState();
@@ -42,6 +43,7 @@ class _BookDetailsState extends State<BookDetails> {
           noteHelper.addNote(widget.book['id'], note);
           _noteController.clear();
           _loadNotes();
+          widget.onNoteUpdate?.call();
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Note ajoutée avec succès!')));
         },
@@ -59,6 +61,7 @@ class _BookDetailsState extends State<BookDetails> {
           NoteHelper noteHelper = await dbHelper.noteHelper;
           noteHelper.updateNote(noteId, updatedNote);
           _loadNotes();
+          widget.onNoteUpdate?.call();
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Note mise à jour avec succès!')));
         },
@@ -70,6 +73,7 @@ class _BookDetailsState extends State<BookDetails> {
     NoteHelper noteHelper = await dbHelper.noteHelper;
     await noteHelper.deleteNote(noteId);
     _loadNotes();
+    widget.onNoteUpdate?.call();
     ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Note supprimée avec succès!')));
   }
