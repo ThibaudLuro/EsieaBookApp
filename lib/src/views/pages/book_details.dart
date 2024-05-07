@@ -78,6 +78,16 @@ class _BookDetailsState extends State<BookDetails> {
         const SnackBar(content: Text('Note supprimée avec succès!')));
   }
 
+  void _deleteBook() async {
+    BookHelper bookHelper = await dbHelper.bookHelper;
+    await bookHelper.deleteBook(widget.book['id'].toString());
+    widget.onUpdate();
+    widget.onNoteUpdate?.call();
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Livre supprimé de la bibliothèque!')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,14 +162,7 @@ class _BookDetailsState extends State<BookDetails> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async {
-                  BookHelper bookHelper = await dbHelper.bookHelper;
-                  await bookHelper.deleteBook(widget.book['id']);
-                  widget.onUpdate();
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Livre supprimé de la bibliothèque!')));
-                },
+                onPressed: _deleteBook,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   shape: RoundedRectangleBorder(

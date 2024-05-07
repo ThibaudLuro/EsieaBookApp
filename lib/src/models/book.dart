@@ -39,5 +39,10 @@ class BookHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+    await _database.delete(
+      'notes',
+      where: 'bookId = ?',
+      whereArgs: [id],
+    );
   }
 }
