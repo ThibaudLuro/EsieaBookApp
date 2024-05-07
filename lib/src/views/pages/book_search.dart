@@ -54,11 +54,11 @@ class _BookSearchState extends State<BookSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Rechercher un livre"),
+        title: const Text("Rechercher un livre"),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(80.0),
+          preferredSize: const Size.fromHeight(80.0),
           child: Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
@@ -69,7 +69,7 @@ class _BookSearchState extends State<BookSearch> {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
               ),
               onChanged: (value) {
                 _searchBooks(value);
@@ -94,7 +94,7 @@ class _BookSearchState extends State<BookSearch> {
               BookHelper bookHelper = await _dbHelper.bookHelper;
               await bookHelper.insertBook(bookData);
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Livre ajouté à la bibliothèque!')));
+                  const SnackBar(content: Text('Livre ajouté à la bibliothèque!')));
               widget.onUpdate();
               Navigator.pop(context);
             },

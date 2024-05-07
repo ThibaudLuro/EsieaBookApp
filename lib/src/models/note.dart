@@ -31,12 +31,16 @@ class NoteHelper {
   }
 
   Future<List<Map<String, dynamic>>> getLatestNotes() async {
-    final List<Map<String, dynamic>> notes = await _database.query(
-      'notes',
-      orderBy: 'id DESC',
-      limit: 5,
-    );
-    return notes;
+    const String sql = '''
+      SELECT notes.id, notes.content, books.title AS bookName
+      FROM notes
+      JOIN books ON notes.bookId = books.id
+      ORDER BY notes.id DESC
+      LIMIT 5
+   ''';
+    final List<Map<String, dynamic>> notesWithBooks =
+        await _database.rawQuery(sql);
+    return notesWithBooks;
   }
 
   Future<void> addNote(String bookId, String content) async {

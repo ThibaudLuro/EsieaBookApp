@@ -109,7 +109,7 @@ class _BookDetailsState extends State<BookDetails> {
             const Text("Mes notes:", style: TextStyle(fontSize: 14)),
             Expanded(
               child: notes.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: Text("Aucune note pour le moment",
                           style: TextStyle(fontSize: 16)))
                   : ListView.builder(
@@ -147,7 +147,7 @@ class _BookDetailsState extends State<BookDetails> {
               },
             ),
             const SizedBox(height: 20),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _addNote,

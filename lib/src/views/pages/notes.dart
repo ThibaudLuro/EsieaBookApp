@@ -1,6 +1,6 @@
 import 'package:esiea_book_app/src/models/note.dart';
 import 'package:esiea_book_app/src/views/widgets/add_note_dialog.dart';
-import 'package:esiea_book_app/src/views/widgets/note_list.dart';
+import 'package:esiea_book_app/src/views/widgets/note.dart';
 import 'package:flutter/material.dart';
 import 'package:esiea_book_app/src/models/database_helper.dart';
 
@@ -48,8 +48,8 @@ class _NotesScreenState extends State<NotesScreen> {
     NoteHelper noteHelper = await dbHelper.noteHelper;
     await noteHelper.deleteNote(noteId);
     _loadNotes();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Note supprimée avec succès!')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Note supprimée avec succès!')));
   }
 
   @override
@@ -58,10 +58,19 @@ class _NotesScreenState extends State<NotesScreen> {
       appBar: AppBar(
         title: const Text('Mes notes'),
       ),
-      body: NoteList(
-        notes: notes,
-        onDelete: _deleteNote,
-        onNoteTap: _editNote,
+      body: ListView.builder(
+        itemCount: notes.length,
+        itemBuilder: (context, index) {
+          return NoteItem(
+            note: notes[index],
+            onDelete: (int id) {
+              _deleteNote(id);
+            },
+            onTap: (int id, String content) {
+              _editNote(id, content);
+            },
+          );
+        },
       ),
     );
   }

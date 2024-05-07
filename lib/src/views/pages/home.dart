@@ -2,6 +2,7 @@ import 'package:esiea_book_app/src/models/book.dart';
 import 'package:esiea_book_app/src/models/note.dart';
 import 'package:esiea_book_app/src/views/pages/book_details.dart';
 import 'package:esiea_book_app/src/views/widgets/add_note_dialog.dart';
+import 'package:esiea_book_app/src/views/widgets/note.dart';
 import 'package:flutter/material.dart';
 import '../../models/database_helper.dart';
 
@@ -114,7 +115,15 @@ class _HomePageState extends State<HomePage> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: latestNotes.length,
                       itemBuilder: (context, index) {
-                        return buildNoteItem(context, index);
+                        return NoteItem(
+                          note: latestNotes[index],
+                          onDelete: (int id) {
+                            _deleteNote(id);
+                          },
+                          onTap: (int id, String content) {
+                            _editNote(id, content);
+                          },
+                        );
                       },
                     ),
             ],
@@ -193,26 +202,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildNoteItem(BuildContext context, int index) {
-    return Dismissible(
-      key: Key(latestNotes[index]['id'].toString()),
-      background: Container(
-          color: Colors.red,
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 20),
-          child: const Icon(Icons.delete, color: Colors.white)),
-      direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
-        _deleteNote(latestNotes[index]['id']);
-      },
-      child: ListTile(
-        title: Text(latestNotes[index]['content']),
-        onTap: () =>
-            _editNote(latestNotes[index]['id'], latestNotes[index]['content']),
       ),
     );
   }

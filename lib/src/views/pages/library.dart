@@ -41,7 +41,7 @@ class _LibraryState extends State<Library> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ma bibliothèque"),
+        title: const Text("Ma bibliothèque"),
       ),
       body: BookList(
         books: books,
@@ -56,7 +56,7 @@ class _LibraryState extends State<Library> {
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
