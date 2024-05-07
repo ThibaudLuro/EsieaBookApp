@@ -1,5 +1,5 @@
 import 'package:esiea_book_app/src/models/book.dart';
-import 'package:esiea_book_app/src/views/widgets/book_list.dart';
+import 'package:esiea_book_app/src/views/widgets/book.dart';
 import 'package:flutter/material.dart';
 import 'book_search.dart';
 import 'book_details.dart';
@@ -43,9 +43,19 @@ class _LibraryState extends State<Library> {
       appBar: AppBar(
         title: const Text("Ma bibliothèque"),
       ),
-      body: BookList(
-        books: books,
-        onTapBook: onTapBook,
+      body: ListView.builder(
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          String coverUrl =
+              'https://covers.openlibrary.org/b/id/${books[index]['coverId']}-M.jpg';
+
+          return BookItem(
+            book: books[index],
+            coverUrl: coverUrl,
+            onTap: () =>
+                onTapBook(books[index]),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

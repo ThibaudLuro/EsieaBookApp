@@ -1,4 +1,5 @@
 import 'package:esiea_book_app/src/models/book.dart';
+import 'package:esiea_book_app/src/views/widgets/book.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -50,6 +51,24 @@ class _BookSearchState extends State<BookSearch> {
     }
   }
 
+  Future<void> _addBookToLibrary(
+      BuildContext context, Map<String, dynamic> bookData) async {
+    try {
+      BookHelper bookHelper = await _dbHelper.bookHelper;
+      await bookHelper.insertBook(bookData);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Livre ajouté à la bibliothèque!')),
+      );
+
+      widget.onUpdate();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erreur lors de l\'ajout du livre.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,20 +101,21 @@ class _BookSearchState extends State<BookSearch> {
         itemCount: _searchResults.length,
         itemBuilder: (context, index) {
           var book = _searchResults[index];
-          return ListTile(
-            title: Text(book['title']),
-            subtitle: Text(book['author_name']?.join(', ') ?? 'Unknown Author'),
+          String coverUrl = book['cover_i'] != null
+              ? 'https://covers.openlibrary.org/b/id/${book['cover_i']}-M.jpg'
+              : 'https://via.placeholder.com/70x100';
+
+          Map<String, dynamic> bookData = {
+            'title': book['title'],
+            'coverId': book['cover_i'],
+            'authors': book['author_name']?.join(', ') ?? 'Unknown Author',
+          };
+
+          return BookItem(
+            book: bookData,
+            coverUrl: coverUrl,
             onTap: () async {
-              Map<String, dynamic> bookData = {
-                'title': book['title'],
-                'coverId': book['cover_i'],
-                'authors': book['author_name']?.join(', ') ?? 'Unknown Author',
-              };
-              BookHelper bookHelper = await _dbHelper.bookHelper;
-              await bookHelper.insertBook(bookData);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Livre ajouté à la bibliothèque!')));
-              widget.onUpdate();
+              await _addBookToLibrary(context, bookData);
               Navigator.pop(context);
             },
           );
