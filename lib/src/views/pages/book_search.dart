@@ -30,6 +30,8 @@ class _BookSearchState extends State<BookSearch> {
           'https://openlibrary.org/search.json?title=${Uri.encodeComponent(query)}&limit=5';
       final response = await http.get(Uri.parse(urlString));
 
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
