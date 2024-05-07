@@ -13,6 +13,7 @@ class BookHelper {
   Future<List<Map<String, dynamic>>> getLatestBooks() async {
     final List<Map<String, dynamic>> books = await _database.query(
       'books',
+      orderBy: 'id DESC',
       limit: 5,
     );
     return books;

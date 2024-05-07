@@ -29,7 +29,7 @@ class _BookDetailsState extends State<BookDetails> {
 
   void _loadNotes() async {
     NoteHelper noteHelper = await dbHelper.noteHelper;
-    notes = await noteHelper.getNotesForBook(widget.book['id']);
+    notes = await noteHelper.getNotesForBook(widget.book['id'].toString());
     setState(() {});
   }
 
@@ -37,10 +37,10 @@ class _BookDetailsState extends State<BookDetails> {
     showDialog(
       context: context,
       builder: (context) => AddNoteDialog(
-        bookId: widget.book['id'],
+        bookId: widget.book['id'].toString(),
         onNoteSaved: (note) async {
           NoteHelper noteHelper = await dbHelper.noteHelper;
-          noteHelper.addNote(widget.book['id'], note);
+          noteHelper.addNote(widget.book['id'].toString(), note);
           _noteController.clear();
           _loadNotes();
           widget.onNoteUpdate?.call();
@@ -55,7 +55,7 @@ class _BookDetailsState extends State<BookDetails> {
     showDialog(
       context: context,
       builder: (context) => AddNoteDialog(
-        bookId: widget.book['id'],
+        bookId: widget.book['id'].toString(),
         initialNote: currentContent,
         onNoteSaved: (updatedNote) async {
           NoteHelper noteHelper = await dbHelper.noteHelper;
@@ -130,13 +130,10 @@ class _BookDetailsState extends State<BookDetails> {
             ),
             const Text("Noter le livre:", style: TextStyle(fontSize: 18)),
             BookRating(
-              bookId: widget.book['id'],
+              bookId: widget.book['id'].toString(),
               initialRating: widget.book['rating']?.toDouble() ?? 0,
               onUpdate: () {
                 widget.onUpdate();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        'Note mise à jour à ${widget.book['rating']} étoiles!')));
               },
             ),
             const SizedBox(height: 20),

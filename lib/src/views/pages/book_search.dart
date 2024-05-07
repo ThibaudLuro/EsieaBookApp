@@ -85,7 +85,6 @@ class _BookSearchState extends State<BookSearch> {
             subtitle: Text(book['author_name']?.join(', ') ?? 'Unknown Author'),
             onTap: () async {
               Map<String, dynamic> bookData = {
-                'id': book['key'],
                 'title': book['title'],
                 'coverId': book['cover_i'],
                 'authors': book['author_name']?.join(', ') ?? 'Unknown Author',

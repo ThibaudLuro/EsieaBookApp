@@ -33,6 +33,7 @@ class NoteHelper {
   Future<List<Map<String, dynamic>>> getLatestNotes() async {
     final List<Map<String, dynamic>> notes = await _database.query(
       'notes',
+      orderBy: 'id DESC',
       limit: 5,
     );
     return notes;

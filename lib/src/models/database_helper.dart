@@ -19,7 +19,7 @@ class DatabaseHelper {
     return await openDatabase(path, version: 1, onCreate: (db, version) async {
       await db.execute('''
       CREATE TABLE books(
-        id TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         authors TEXT,
         coverId TEXT,
