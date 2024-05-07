@@ -2,6 +2,7 @@ import 'package:esiea_book_app/src/models/book.dart';
 import 'package:esiea_book_app/src/models/note.dart';
 import 'package:esiea_book_app/src/views/widgets/add_note_dialog.dart';
 import 'package:esiea_book_app/src/views/widgets/book_rating.dart';
+import 'package:esiea_book_app/src/views/widgets/note.dart';
 import 'package:flutter/material.dart';
 import '../../models/database_helper.dart';
 
@@ -115,25 +116,14 @@ class _BookDetailsState extends State<BookDetails> {
                   : ListView.builder(
                       itemCount: notes.length,
                       itemBuilder: (context, index) {
-                        return Dismissible(
-                          key: Key(notes[index]['id'].toString()),
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) {
-                            _deleteNote(notes[index]['id']);
+                        return NoteItem(
+                          note: notes[index],
+                          onDelete: (int id) {
+                            _deleteNote(id);
                           },
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child:
-                                const Icon(Icons.delete, color: Colors.white),
-                          ),
-                          child: ListTile(
-                            title: Text(notes[index]['content']),
-                            onTap: () => _editNote(
-                                notes[index]['id'], notes[index]['content']),
-                          ),
+                          onTap: (int id, String content) {
+                            _editNote(id, content);
+                          },
                         );
                       },
                     ),

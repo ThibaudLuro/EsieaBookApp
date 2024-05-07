@@ -28,7 +28,7 @@ class NoteItem extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(note['content']),
-        subtitle: Text(note['bookName'] ?? 'No book associated'),
+        subtitle: note['bookName'] != null ? Text(note['bookName']) : null,
         onTap: () => onTap(note['id'], note['content']),
       ),
     );
